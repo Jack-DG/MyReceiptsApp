@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MyReceipts</string>
+    <string name="receipt_title_hint">Enter a title for the receipt.</string>
+    <string name="receipt_title_label">Receipt Title:</string>
+    <string name="receipt_details_label">Receipt Details:</string>
+    <string name="receipt_shop_name">Enter a shop name.</string>
+    <string name="receipt_comment">Enter a comment.</string>
+    <string name="receipt_solved_label">Solved</string>
+    <string name="date_picker_title">Date of receipt:</string>
+    <string name="new_receipt">New Crime</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$d receipts</string>
+    <string name="crime_suspect_text">Choose Suspect</string>
+    <string name="receipt_report_text">Send Receipt Report</string>
+    <string name="receipt_report">
+        The receipt titled \'%1$s\' from \'%3$s\' was added to the MyReceipts app on %2$s.
+        The information \'%4$s\' was included as a comment.
+    </string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <string name="crime_report_no_suspect">there is no suspect</string>
+    <string name="crime_report_suspect">the suspect is %s.</string>
+    <string name="receipt_report_subject">MyReceipts Receipt Report</string>
+    <string name="send_report">Send receipt report via</string>
+    <string name="delete_receipt_btn">Delete Receipt</string>
+    <string name="help_loading">Help Loading</string>
+    <string name="show_help">Show Help</string>
+    <string name="deletion_warning">Warning: Deleting a receipt is irreversible and cannot be undone</string>
+</resources>
