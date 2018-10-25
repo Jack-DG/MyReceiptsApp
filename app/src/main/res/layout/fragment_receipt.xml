@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
+    android:layout_marginRight="16dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -47,6 +48,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/receipt_title_hint" />
+
+            <TextView
+                android:id="@+id/receipt_title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:hint="Help: The Receipt Title will be shown on the the list view alongside the Shop Name and date added." />
         </LinearLayout>
     </LinearLayout>
 
@@ -102,12 +111,30 @@
 
     </LinearLayout>
 
-
-
-    <Button
-        android:id="@+id/receipt_date"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:text="Date:" />
+
+        <Button
+            android:id="@+id/receipt_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/receipt_report"

@@ -51,13 +51,8 @@ public class ReceiptFragment extends Fragment {
     private File mPhotoFile;
     private EditText mTitleField;
     private Button mDateButton;
-    //private CheckBox mSolvedCheckBox;
-    //private Button mSuspectButton;
     private EditText mShopName;
     private EditText mComment;
-    private TextView mLocationLat;
-    private TextView mLocationLon;
-    private TextView mShowMapButton;
     private Button mReportButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
@@ -143,7 +138,6 @@ public class ReceiptFragment extends Fragment {
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int before, int count) {
-                // This space intentionally left blank
             }
 
             @Override
@@ -153,7 +147,6 @@ public class ReceiptFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // This one too
             }
         });
 
@@ -174,7 +167,6 @@ public class ReceiptFragment extends Fragment {
         mShopName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int before, int count) {
-                // This space intentionally left blank
             }
 
             @Override
@@ -184,7 +176,6 @@ public class ReceiptFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // This one too
             }
         });
 
@@ -193,7 +184,6 @@ public class ReceiptFragment extends Fragment {
         mComment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int before, int count) {
-                // This space intentionally left blank
             }
 
             @Override
@@ -203,64 +193,8 @@ public class ReceiptFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // This one too
             }
         });
-
-        /*mLocationLat = (TextView) v.findViewById(R.id.receipt_lat);
-        mLocationLat.setText(mReceipt.getLocationLat());
-        mLocationLat.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int before, int count) {
-                // This space intentionally left blank
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mReceipt.setLocationLat(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // This one too
-            }
-        });*/
-
-        /*mLocationLon = (TextView) v.findViewById(R.id.receipt_lon);
-        mLocationLon.setText(mReceipt.getLocationLon());
-        mLocationLon.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int before, int count) {
-                // This space intentionally left blank
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mReceipt.setLocationLon(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // This one too
-            }
-        });*/
-
-        /*mShowMapButton = (Button) v.findViewById(R.id.receipt_map);
-        mShowMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Show map
-            }
-        });*/
-
-        /*mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
-        mSolvedCheckBox.setChecked(mReceipt.isSolved());
-        mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                mReceipt.setSolved(isChecked);
-            }
-        });*/
 
 
         mDeleteButton = (Button) v.findViewById(R.id.delete_button);
@@ -285,23 +219,9 @@ public class ReceiptFragment extends Fragment {
             }
         });
 
-        /*final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        mSuspectButton = (Button) v.findViewById(R.id.crime_suspect);
-        mSuspectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(pickContact, REQUEST_CONTACT);
-            }
-        });
-
-        if (mReceipt.getSuspect() != null) {
-            mSuspectButton.setText(mReceipt.getSuspect());
-        }*/
 
         PackageManager packageManager = getActivity().getPackageManager();
-        /*if (packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
-            mSuspectButton.setEnabled(false);
-        }*/
+
 
         mPhotoButton = (ImageButton) v.findViewById(R.id.receipt_camera);
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

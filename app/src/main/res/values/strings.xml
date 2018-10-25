@@ -7,7 +7,7 @@
     <string name="receipt_comment">Enter a comment.</string>
     <string name="receipt_solved_label">Solved</string>
     <string name="date_picker_title">Date of receipt:</string>
-    <string name="new_receipt">New Crime</string>
+    <string name="new_receipt">New Receipt</string>
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1$d receipts</string>
