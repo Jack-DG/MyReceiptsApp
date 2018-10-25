@@ -1,10 +1,11 @@
 package jackg.myreceipts;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.bignerdranch.android.myreceipts.R;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 public class DatePickerFragment extends DialogFragment {
 
@@ -33,8 +35,10 @@ public class DatePickerFragment extends DialogFragment {
         return fragment;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        assert getArguments() != null;
         Date date = (Date) getArguments().getSerializable(ARG_DATE);
 
         Calendar calendar = Calendar.getInstance();
@@ -43,23 +47,20 @@ public class DatePickerFragment extends DialogFragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
+        @SuppressLint("InflateParams") View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
 
-        mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
+        mDatePicker = v.findViewById(R.id.dialog_date_picker);
         mDatePicker.init(year, month, day, null);
 
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setView(v)
                 .setTitle(R.string.date_picker_title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        int year = mDatePicker.getYear();
-                        int month = mDatePicker.getMonth();
-                        int day = mDatePicker.getDayOfMonth();
-                        Date date = new GregorianCalendar(year, month, day).getTime();
-                        sendResult(Activity.RESULT_OK, date);
-                    }
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    int year1 = mDatePicker.getYear();
+                    int month1 = mDatePicker.getMonth();
+                    int day1 = mDatePicker.getDayOfMonth();
+                    Date date1 = new GregorianCalendar(year1, month1, day1).getTime();
+                    sendResult(Activity.RESULT_OK, date1);
                 })
                 .create();
     }

@@ -1,5 +1,6 @@
 package jackg.myreceipts;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 public class ReceiptLab {
 
+    @SuppressLint("StaticFieldLeak")
     private static ReceiptLab sReceiptLab;
 
     private Context mContext;
@@ -49,35 +51,28 @@ public class ReceiptLab {
     public List<Receipt> getReceipt() {
         List<Receipt> receipts = new ArrayList<>();
 
-        ReceiptCursorWrapper cursor = queryReceipt(null, null);
-
-        try {
+        try (ReceiptCursorWrapper cursor = queryReceipt(null, null)) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 receipts.add(cursor.getReceipt());
                 cursor.moveToNext();
             }
-        } finally {
-            cursor.close();
         }
         return receipts;
     }
 
     public Receipt getReceipt(UUID id) {
-        ReceiptCursorWrapper cursor = queryReceipt(
-                ReceiptTable.Cols.UUID + " = ?",
-                new String[] { id.toString() }
-        );
 
-        try {
+        try (ReceiptCursorWrapper cursor = queryReceipt(
+                ReceiptTable.Cols.UUID + " = ?",
+                new String[]{id.toString()}
+        )) {
             if (cursor.getCount() == 0) {
                 return null;
             }
 
             cursor.moveToFirst();
             return cursor.getReceipt();
-        } finally {
-            cursor.close();
         }
     }
 
@@ -95,7 +90,7 @@ public class ReceiptLab {
     }
 
     private ReceiptCursorWrapper queryReceipt(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(
+        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(
                 ReceiptTable.NAME,
                 null,
                 whereClause,
@@ -115,8 +110,7 @@ public class ReceiptLab {
         values.put(ReceiptTable.Cols.DATE, receipt.getDate().getTime());
         values.put(ReceiptTable.Cols.SHOP_NAME, receipt.getShopName());
         values.put(ReceiptTable.Cols.COMMENT, receipt.getComment());
-        values.put(ReceiptTable.Cols.LOCATION_LAT, receipt.getLocationLat());
-        values.put(ReceiptTable.Cols.LOCATION_LON, receipt.getLocationLon());
+
 
         return values;
     }

@@ -10,10 +10,9 @@ public class Receipt {
     private Date mDate;
     private String mShopName;
     private String mComment;
-    private String mLocationLat;
-    private String mLocationLon;
 
-    public Receipt() {
+
+    Receipt() {
         this(UUID.randomUUID());
     }
 
@@ -57,22 +56,6 @@ public class Receipt {
 
     public void setComment(String comment) {
         mComment = comment;
-    }
-
-    public String getLocationLat() {
-        return mLocationLat;
-    }
-
-    public void setLocationLat(String locationLat) {
-        mLocationLat = locationLat;
-    }
-
-    public String getLocationLon() {
-        return mLocationLon;
-    }
-
-    public void setLocationLon(String locationLon) {
-        mLocationLon = locationLon;
     }
 
     public String getPhotoFilename() {

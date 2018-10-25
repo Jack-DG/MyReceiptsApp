@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginEnd="16dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -24,13 +26,15 @@
                 android:layout_height="80dp"
                 android:background="@android:color/darker_gray"
                 android:cropToPadding="true"
-                android:scaleType="centerInside" />
+                android:scaleType="centerInside"
+                android:contentDescription="@string/photo" />
 
             <ImageButton
                 android:id="@+id/receipt_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_camera" />
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="@string/photo_button" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -47,7 +51,8 @@
                 android:id="@+id/receipt_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/receipt_title_hint" />
+                android:hint="@string/receipt_title_background_text"
+                android:inputType="" />
 
             <TextView
                 android:id="@+id/receipt_title1"
@@ -55,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:hint="Help: The Receipt Title will be shown on the the list view alongside the Shop Name and date added." />
+                android:hint="@string/help_the_receipt_title_will_be_shown_on_the_the_list_view_alongside_the_shop_name_and_date_added" />
         </LinearLayout>
     </LinearLayout>
 
@@ -74,9 +79,9 @@
             android:layout_width="65dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Shop:" />
+            android:text="@string/shop" />
 
         <EditText
             android:id="@+id/receipt_shop"
@@ -84,7 +89,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/receipt_shop_name" />
+            android:hint="@string/receipt_shop_name"
+            android:inputType="" />
     </LinearLayout>
 
     <LinearLayout
@@ -96,9 +102,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Comments:" />
+            android:text="@string/comments" />
 
         <EditText
             android:id="@+id/receipt_comment"
@@ -120,9 +126,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Date:" />
+            android:text="@string/date" />
 
         <Button
             android:id="@+id/receipt_date"
@@ -130,7 +136,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            tools:ignore="TextViewEdits" />
 
 
 

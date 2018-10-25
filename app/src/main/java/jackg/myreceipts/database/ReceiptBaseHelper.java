@@ -22,9 +22,8 @@ public class ReceiptBaseHelper extends SQLiteOpenHelper {
                 ReceiptTable.Cols.TITLE + ", " +
                 ReceiptTable.Cols.DATE + ", " +
                 ReceiptTable.Cols.SHOP_NAME + ", " +
-                ReceiptTable.Cols.COMMENT + ", " +
-                ReceiptTable.Cols.LOCATION_LAT + ", " +
-                ReceiptTable.Cols.LOCATION_LON +
+                ReceiptTable.Cols.COMMENT +
+
                 ")"
         );
     }

@@ -1,6 +1,5 @@
 package jackg.myreceipts;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,15 +8,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +22,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bignerdranch.android.myreceipts.R;
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ReceiptFragment extends Fragment {
@@ -44,21 +36,13 @@ public class ReceiptFragment extends Fragment {
     private static final String DIALOG_DATE = "DialogDate";
 
     private static final int REQUEST_DATE = 0;
-    private static final int REQUEST_CONTACT = 1;
     private static final int REQUEST_PHOTO = 2;
 
     private Receipt mReceipt;
     private File mPhotoFile;
-    private EditText mTitleField;
     private Button mDateButton;
-    private EditText mShopName;
-    private EditText mComment;
-    private Button mReportButton;
-    private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
-    private GoogleApiClient mClient;
-    private Button mDeleteButton;
 
     public static ReceiptFragment newInstance(UUID receiptId) {
         Bundle args = new Bundle();
@@ -72,42 +56,11 @@ public class ReceiptFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        assert getArguments() != null;
         UUID receiptID = (UUID) getArguments().getSerializable(ARG_RECEIPT_ID);
         mReceipt = ReceiptLab.get(getActivity()).getReceipt(receiptID);
         mPhotoFile = ReceiptLab.get(getActivity()).getPhotoFile(mReceipt);
 
-        Log.i("LOCATION", "onCreate()");
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            Log.i("LOCATION", "No permission");
-        }
-
-        mClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
-                        LocationRequest request = LocationRequest.create();
-                        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                        request.setNumUpdates(1);
-                        request.setInterval(0);
-
-                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-                        Log.i("LOCATION", "Connected");
-
-                        LocationServices.FusedLocationApi.requestLocationUpdates(mClient, request, location -> {
-                            Log.i("LOCATION", "TEST");
-                            Log.i("LOCATION", location.toString());
-                        });
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-                        Log.i("LOCATION", "TEST");
-                    }
-                })
-                .build();
     }
 
     @Override
@@ -120,22 +73,20 @@ public class ReceiptFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mClient.connect();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mClient.disconnect();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_receipt, container, false);
 
-        mTitleField = (EditText) v.findViewById(R.id.receipt_title);
-        mTitleField.setText(mReceipt.getTitle());
-        mTitleField.addTextChangedListener(new TextWatcher() {
+        EditText titleField = v.findViewById(R.id.receipt_title);
+        titleField.setText(mReceipt.getTitle());
+        titleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -150,21 +101,19 @@ public class ReceiptFragment extends Fragment {
             }
         });
 
-        mDateButton = (Button) v.findViewById(R.id.receipt_date);
+        mDateButton = v.findViewById(R.id.receipt_date);
         updateDate();
-        mDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mReceipt.getDate());
-                dialog.setTargetFragment(ReceiptFragment.this, REQUEST_DATE);
-                dialog.show(manager, DIALOG_DATE);
-            }
+        mDateButton.setOnClickListener(view -> {
+            FragmentManager manager = getFragmentManager();
+            DatePickerFragment dialog = DatePickerFragment.newInstance(mReceipt.getDate());
+            dialog.setTargetFragment(ReceiptFragment.this, REQUEST_DATE);
+            assert manager != null;
+            dialog.show(manager, DIALOG_DATE);
         });
 
-        mShopName = (EditText) v.findViewById(R.id.receipt_shop);
-        mShopName.setText(mReceipt.getShopName());
-        mShopName.addTextChangedListener(new TextWatcher() {
+        EditText shopName = v.findViewById(R.id.receipt_shop);
+        shopName.setText(mReceipt.getShopName());
+        shopName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -179,9 +128,9 @@ public class ReceiptFragment extends Fragment {
             }
         });
 
-        mComment = (EditText) v.findViewById(R.id.receipt_comment);
-        mComment.setText(mReceipt.getComment());
-        mComment.addTextChangedListener(new TextWatcher() {
+        EditText comment = v.findViewById(R.id.receipt_comment);
+        comment.setText(mReceipt.getComment());
+        comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -197,51 +146,43 @@ public class ReceiptFragment extends Fragment {
         });
 
 
-        mDeleteButton = (Button) v.findViewById(R.id.delete_button);
-        mDeleteButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                ReceiptLab.get(getActivity()).deleteReceipt(mReceipt.getId());
-                getActivity().finish();
-            }
+        Button deleteButton = v.findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(v1 -> {
+            ReceiptLab.get(getActivity()).deleteReceipt(mReceipt.getId());
+            Objects.requireNonNull(getActivity()).finish();
         });
 
 
-        mReportButton = (Button) v.findViewById(R.id.receipt_report);
-        mReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_TEXT, getReceiptReport());
-                i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.receipt_report_subject));
-                i = Intent.createChooser(i, getString(R.string.send_report));
-                startActivity(i);
-            }
+        Button reportButton = v.findViewById(R.id.receipt_report);
+        reportButton.setOnClickListener(view -> {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_TEXT, getReceiptReport());
+            i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.receipt_report_subject));
+            i = Intent.createChooser(i, getString(R.string.send_report));
+            startActivity(i);
         });
 
 
-        PackageManager packageManager = getActivity().getPackageManager();
+        PackageManager packageManager = Objects.requireNonNull(getActivity()).getPackageManager();
 
 
-        mPhotoButton = (ImageButton) v.findViewById(R.id.receipt_camera);
+        ImageButton photoButton = v.findViewById(R.id.receipt_camera);
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         boolean canTakePhtoto = mPhotoFile != null && captureImage.resolveActivity(packageManager) != null;
-        mPhotoButton.setEnabled(canTakePhtoto);
-        mPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = FileProvider.getUriForFile(getActivity(), "com.bignerdranch.android.myreceipts.fileprovider", mPhotoFile);
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        photoButton.setEnabled(canTakePhtoto);
+        photoButton.setOnClickListener(view -> {
+            Uri uri = FileProvider.getUriForFile(getActivity(), "com.bignerdranch.android.myreceipts.fileprovider", mPhotoFile);
+            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
-                List<ResolveInfo> cameraActivities = getActivity().getPackageManager().queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY);
-                for (ResolveInfo activity : cameraActivities) {
-                    getActivity().grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                }
-                startActivityForResult(captureImage, REQUEST_PHOTO);
+            List<ResolveInfo> cameraActivities = getActivity().getPackageManager().queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo activity : cameraActivities) {
+                getActivity().grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
+            startActivityForResult(captureImage, REQUEST_PHOTO);
         });
-        mPhotoView = (ImageView) v.findViewById(R.id.receipt_photo);
+        mPhotoView = v.findViewById(R.id.receipt_photo);
         updatePhotoView();
 
         return v;
@@ -258,7 +199,7 @@ public class ReceiptFragment extends Fragment {
             mReceipt.setDate(date);
             updateDate();
         } else if (requestCode == REQUEST_PHOTO) {
-            Uri uri = FileProvider.getUriForFile(getActivity(), "com.bignerdranch.android.myreceipts.fileprovider", mPhotoFile);
+            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getActivity()), "com.bignerdranch.android.myreceipts.fileprovider", mPhotoFile);
             getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             updatePhotoView();
@@ -274,16 +215,14 @@ public class ReceiptFragment extends Fragment {
         String dateFormat = "EEE, MMM dd";
         String dateString = DateFormat.format(dateFormat, mReceipt.getDate()).toString();
 
-        String report = getString(R.string.receipt_report, mReceipt.getTitle(), dateString, mReceipt.getShopName(), mReceipt.getComment());
-
-        return report;
+        return getString(R.string.receipt_report, mReceipt.getTitle(), dateString, mReceipt.getShopName(), mReceipt.getComment());
     }
 
     private void updatePhotoView() {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoView.setImageDrawable(null);
         } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), Objects.requireNonNull(getActivity()));
             mPhotoView.setImageBitmap(bitmap);
         }
     }

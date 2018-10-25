@@ -2,6 +2,7 @@ package jackg.myreceipts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.bignerdranch.android.myreceipts.R;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ReceiptListFragment extends Fragment {
 
@@ -33,10 +35,10 @@ public class ReceiptListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_receipt_list, container, false);
 
-        mReceiptRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
+        mReceiptRecyclerView = view.findViewById(R.id.crime_recycler_view);
         mReceiptRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (savedInstanceState != null) {
@@ -78,7 +80,7 @@ public class ReceiptListFragment extends Fragment {
                 return true;
             case R.id.show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
-                getActivity().invalidateOptionsMenu();
+                Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
                 updateSubtitle();
                 return true;
             case R.id.show_help:
@@ -100,7 +102,8 @@ public class ReceiptListFragment extends Fragment {
         }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setSubtitle(subtitle);
+        assert activity != null;
+        Objects.requireNonNull(activity.getSupportActionBar()).setSubtitle(subtitle);
     }
 
     private void updateUI() {
@@ -119,7 +122,7 @@ public class ReceiptListFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
@@ -131,13 +134,13 @@ public class ReceiptListFragment extends Fragment {
         private TextView mDateTextView;
         private TextView mShopName;
 
-        public ReceiptHolder(LayoutInflater inflater, ViewGroup parent) {
+        ReceiptHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_receipt, parent, false));
             itemView.setOnClickListener(this);
 
-            mTitleTextView = (TextView) itemView.findViewById(R.id.receipt_title);
-            mDateTextView = (TextView) itemView.findViewById(R.id.receipt_date);
-            mShopName = (TextView) itemView.findViewById(R.id.receipt_shopname);
+            mTitleTextView = itemView.findViewById(R.id.receipt_title);
+            mDateTextView = itemView.findViewById(R.id.receipt_date);
+            mShopName = itemView.findViewById(R.id.receipt_shopname);
         }
 
         public void bind(Receipt receipt) {
@@ -149,7 +152,6 @@ public class ReceiptListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            //Toast.makeText(getActivity(), mReceipt.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
             Intent intent = ReceiptActivity.newIntent(getActivity(), mReceipt.getId());
             startActivity(intent);
         }
@@ -158,18 +160,19 @@ public class ReceiptListFragment extends Fragment {
     private class ReceiptAdapter extends RecyclerView.Adapter<ReceiptHolder> {
         private List<Receipt> mReceipts;
 
-        public ReceiptAdapter(List<Receipt> receipts) {
+        ReceiptAdapter(List<Receipt> receipts) {
             mReceipts = receipts;
         }
 
+        @NonNull
         @Override
-        public ReceiptHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ReceiptHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             return new ReceiptHolder(layoutInflater, parent);
         }
 
         @Override
-        public void onBindViewHolder(ReceiptHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ReceiptHolder holder, int position) {
             Receipt receipt = mReceipts.get(position);
             holder.bind(receipt);
         }
@@ -179,7 +182,7 @@ public class ReceiptListFragment extends Fragment {
             return mReceipts.size();
         }
 
-        public void setReceipts(List<Receipt> receipts) {
+        void setReceipts(List<Receipt> receipts) {
             mReceipts = receipts;
         }
     }
